@@ -1,6 +1,8 @@
-var location1 = 1;
-var location2 = 2;
-var location3 = 3;
+//Generating a random number from 0-4.99 and rounding it down to an intenger.
+var randomLoc = Math.floor(Math.random() * 5);
+var location1 = randomLoc;
+var location2 = location1 + 1;
+var location3 = location2 + 1;
 var guess;
 var stats;
 var hits = 0;
