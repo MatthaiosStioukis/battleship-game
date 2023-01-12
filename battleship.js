@@ -13,7 +13,7 @@ while (!isSunk) {
     // Get the users guess
     guess = prompt("Ready, aim, fire! (enter a number from 0-6):");
     // Check if the number is in the range of the provided grid
-    if (guess > 0 && guess <= 6) {
+    if (guess >= 0 && guess <= 6) {
         guesses = guesses + 1;
         // Check if the guess is a hit!
         if (guess == location1 || guess == location2 || guess == location3) {
