@@ -62,7 +62,14 @@ var controller = {
     guesses: 0,
 
     procesGuess: function(guess) {
-
+        var location = parseGuess(guess);
+        if (location) {
+            this.guesses++;
+            var hit = model.fire(location);
+            if (hit && model.shipSunk === model.numShips) {
+                view.displayMessage("You sank all my battleships, in " + this.guesses + " guesses.");
+            }
+        }
     }
 };
 
@@ -74,7 +81,7 @@ function parseGuess(guess) {
     if (guess === 0 || guess.length !== 2) {
         alert("OOops, please enter a letter and a number on the board.");
     } else {
-        var firstCharacter = guess.charAt(0);
+        var firstCharacter = guess.charAt(0).toUpperCase();
         var row = alphabet.indexOf(firstCharacter);
         var column = guess.charAt(1);
 
@@ -82,20 +89,20 @@ function parseGuess(guess) {
             alert("OOops, that isn't on the Board!");
         } else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
             alert("OOops that is of the Board!");
-        } 
+        } else {
+            return row + column;
+        }
     }
-}
+    return null;
+};
 
-model.fire("53");
-model.fire("06");
-model.fire("16");
-model.fire("26");
-model.fire("34");
-model.fire("24");
-model.fire("44");
-model.fire("12");
-model.fire("11");
-model.fire("10");
-model.fire("22");
-model.fire("05");
-model.fire("66");
+controller.procesGuess("a0");
+controller.procesGuess("a6");
+controller.procesGuess("B6");
+controller.procesGuess("C6");
+controller.procesGuess("C4");
+controller.procesGuess("D4");
+controller.procesGuess("E4");
+controller.procesGuess("B0");
+controller.procesGuess("b1");
+controller.procesGuess("b2");
