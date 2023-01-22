@@ -96,13 +96,26 @@ function parseGuess(guess) {
     return null;
 };
 
-controller.procesGuess("a0");
-controller.procesGuess("a6");
-controller.procesGuess("B6");
-controller.procesGuess("C6");
-controller.procesGuess("C4");
-controller.procesGuess("D4");
-controller.procesGuess("E4");
-controller.procesGuess("B0");
-controller.procesGuess("b1");
-controller.procesGuess("b2");
+function init() {
+    var fireButton = document.getElementById("fireButton");
+    fireButton.onclick = handleFireButton;
+    var guessInput = document.getElementById("guessInput");
+    guessInput.onkeydown = handleKeyDown;
+};
+
+function handleFireButton() {
+    var guessInput = document.getElementById("guessInput");
+    var guess = guessInput.value;
+    controller.procesGuess(guess);
+    guessInput.value = "";
+};
+
+function handleKeyDown(e) {
+    var fireButton = document.getElementById("fireButton");
+    if (e.keyCode === 13) {
+        fireButton.click();
+        return false;
+    }
+}
+window.onload = init;
+
