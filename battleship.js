@@ -15,12 +15,59 @@ var view = {
         var cell = document.getElementById(location);
         cell.setAttribute("class", "hit");
     }
-}
+};
 
-view.displayMessage("Tap tap.. is this thing on?");
-view.displayMiss("00");
-view.displayHit("34");
-view.displayMiss("55");
-view.displayHit("12");
-view.displayMiss("25");
-view.displayHit("26");
+// This is the Model object which will keep track of the state of the game. 
+var model = {
+    numShips: 3,
+    boardSize: 7,
+    shipLength: 3,
+    shipSunk: 0,
+// The ships property is actually holding three objects which are representing the ships.(array of objects).
+    ships: [{ locations: ["06", "16", "26"], hits: ["", "", ""] },
+            { locations: ["24", "34", "44"], hits: ["", "", ""] },
+            { locations: ["10", "11", "12"], hits: ["", "", ""] }],
+// The fire method will be responsible for checking if the players guess is a hit or a miss by checking each ships locations array on the guess.
+    fire: function(guess) {
+        for (var i = 0; i < this.numShips; i++) {
+            var ship = this.ships[i];
+            var index = ship.locations.indexOf(guess);
+            if (index >= 0) {
+                ship.hits[index] = "hit";
+                view.displayHit(guess);
+                view.displayMessage("HIT!");
+                if (this.isSunk(ship)) {
+                    this.shipSunk++;
+                    view.displayMessage("You sunk my Battleship!");
+                }
+                return true;
+            }
+        }
+        view.displayMiss(guess);
+        view.displayMessage("You missed!");
+        return false;
+    },
+// The isSunk method will take as a argument a ship and check the values of the hit array if they are all hit.
+    isSunk: function(ship) {
+        for (var i = 0; i < this.shipLength; i++) {
+            if (ship.hits[i] !== "hit") {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+model.fire("53");
+model.fire("06");
+model.fire("16");
+model.fire("26");
+model.fire("34");
+model.fire("24");
+model.fire("44");
+model.fire("12");
+model.fire("11");
+model.fire("10");
+model.fire("22");
+model.fire("05");
+model.fire("66");
