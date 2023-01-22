@@ -58,6 +58,34 @@ var model = {
     }
 };
 
+var controller = {
+    guesses: 0,
+
+    procesGuess: function(guess) {
+
+    }
+};
+
+// The parseGuess function is responsible to validate and transform the players guess into valid and processable data for the model object.
+function parseGuess(guess) {
+
+    var alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+
+    if (guess === 0 || guess.length !== 2) {
+        alert("OOops, please enter a letter and a number on the board.");
+    } else {
+        var firstCharacter = guess.charAt(0);
+        var row = alphabet.indexOf(firstCharacter);
+        var column = guess.charAt(1);
+
+        if (isNaN(row) || isNaN(column)) {
+            alert("OOops, that isn't on the Board!");
+        } else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
+            alert("OOops that is of the Board!");
+        } 
+    }
+}
+
 model.fire("53");
 model.fire("06");
 model.fire("16");
