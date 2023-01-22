@@ -1,34 +1,26 @@
-//Generating a random number from 0-4.99 and rounding it down to an intenger.
-var randomLoc = Math.floor(Math.random() * 5);
-var location1 = randomLoc;
-var location2 = location1 + 1;
-var location3 = location2 + 1;
-var guess;
-var stats;
-var hits = 0;
-var guesses = 0;
-var isSunk = false;
-
-while (!isSunk) {
-    // Get the users guess
-    guess = prompt("Ready, aim, fire! (enter a number from 0-6):");
-    // Check if the number is in the range of the provided grid
-    if (guess >= 0 && guess <= 6) {
-        guesses = guesses + 1;
-        // Check if the guess is a hit!
-        if (guess == location1 || guess == location2 || guess == location3) {
-            hits = hits + 1;
-            alert("Hit!")
-            if (hits == 3) {
-                isSunk = true;
-                alert("You've sank my Battleship!");
-            }
-        }else {
-            alert("Miss!");
-        }
-    }else {
-        alert("Please enter a valid cell number!");
+// This is the view object which will allow me to change the page dynamicly.
+var view = {
+    // This Method will display the Message if the player has Hit, Miss, or sunk a Ship.
+    displayMessage: function(msg) {
+        var messageArea= document.getElementById("messageArea");
+        messageArea.innerHTML = msg;
+    },
+    // This Method will place Misses in the grid.
+    displayMiss: function(location) {
+        var cell = document.getElementById(location);
+        cell.setAttribute("class", "miss");
+    },
+    // This Method will place a Ship in the grid in case the Player quest right.
+    displayHit: function(location) {
+        var cell = document.getElementById(location);
+        cell.setAttribute("class", "hit");
     }
 }
-stats = "You took " + guesses + " guesses too sink my Battleship, " + "which means your shooting accuracy was " + (3/guesses);
-alert(stats);
+
+view.displayMessage("Tap tap.. is this thing on?");
+view.displayMiss("00");
+view.displayHit("34");
+view.displayMiss("55");
+view.displayHit("12");
+view.displayMiss("25");
+view.displayHit("26");
