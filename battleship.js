@@ -23,11 +23,11 @@ var model = {
     boardSize: 7,
     shipLength: 3,
     shipSunk: 0,
-// The ships property is actually holding three objects which are representing the ships.(array of objects).
-    ships: [{ locations: ["06", "16", "26"], hits: ["", "", ""] },
-            { locations: ["24", "34", "44"], hits: ["", "", ""] },
-            { locations: ["10", "11", "12"], hits: ["", "", ""] }],
-// The fire method will be responsible for checking if the players guess is a hit or a miss by checking each ships locations array on the guess.
+    // The ships property is actually holding three objects which are representing the ships.(array of objects).
+    ships: [{ locations: [0, 0, 0], hits: ["", "", ""] },
+            { locations: [0, 0, 0], hits: ["", "", ""] },
+            { locations: [0, 0, 0], hits: ["", "", ""] }],
+    // The fire method will be responsible for checking if the players guess is a hit or a miss by checking each ships locations array on the guess.
     fire: function(guess) {
         for (var i = 0; i < this.numShips; i++) {
             var ship = this.ships[i];
@@ -47,7 +47,7 @@ var model = {
         view.displayMessage("You missed!");
         return false;
     },
-// The isSunk method will take as a argument a ship and check the values of the hit array if they are all hit.
+    // The isSunk method will take as a argument a ship and check the values of the hit array if they are all hit.
     isSunk: function(ship) {
         for (var i = 0; i < this.shipLength; i++) {
             if (ship.hits[i] !== "hit") {
@@ -55,6 +55,55 @@ var model = {
             }
         }
         return true;
+    },
+
+    generateShipLocation: function() {
+        // Generates ships in the ships array until the number of ships equal's the numShips in the game.
+        var locations;
+        for (var i = 0; i < this.numShips; i++) {
+            do {
+                locations = this.generateShip();
+            } while(this.collision(locations));
+            this.ships[i].locations = locations;
+        }
+    },
+
+    // The generateShip method creates a array with random location for one ship without checking if it colides with an existing ship's location.
+    generateShip: function() {
+        // first it will randomly assign to the direction variable the direction(verticaly || horizontally) 1 being horizontal and 0 being vertical.
+        var direction = Math.floor(Math.random() * 2);
+        var row;
+        var col;
+        if (direction === 1) {
+            row = Math.floor(Math.random() * this.boardSize);
+            col = Math.floor(Math.random() * (this.boardSize - (this.shipLength + 1)));
+        } else {
+            row = Math.floor(Math.random() * (this.boardSize - (this.shipLength + 1)));
+            col = Math.floor(Math.random() * this.boardSize);
+        }
+
+        var newShipLocations = [];
+        for (var i = 0; i < this.shipLength; i++) {
+            if (direction === 1) {
+                newShipLocations.push(row + "" + (col + i));
+            } else {
+                newShipLocations.push((row + i) + "" + col);
+            }
+        }
+        return newShipLocations;
+    },
+
+    // The collision Method takes a ship and checks if any of the ships locations overlap or collide with any of the existing ships on the board.
+    collision: function(locations) {
+        for (var i = 0; i < this.numShips; i++){
+            var ship = this.ships[i];
+            for (var j = 0; j < locations.length; j++) {
+                if (ship.locations.indexOf(locations[j]) >= 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 };
 
@@ -101,6 +150,8 @@ function init() {
     fireButton.onclick = handleFireButton;
     var guessInput = document.getElementById("guessInput");
     guessInput.onkeydown = handleKeyDown;
+
+    model.generateShipLocation();
 };
 
 function handleFireButton() {
@@ -116,6 +167,6 @@ function handleKeyDown(e) {
         fireButton.click();
         return false;
     }
-}
+};
 window.onload = init;
 
